@@ -1,0 +1,32 @@
+services:
+  clojure-service:
+    platform: linux/amd64
+    build: ./
+    ports:
+      - 8080:8080
+    environment:
+      PORT: 8080
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_ADDRESS: postgres-database
+      INITIAL_CREDIT: 1000
+    depends_on:
+      - postgres-database
+    links:
+      - postgres-database
+
+  postgres-database:
+    image: postgres:15.2-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes: 
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local
