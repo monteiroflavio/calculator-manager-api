@@ -13,8 +13,9 @@
 (defmulti ->exception-response (fn [e] (:type (ex-data e))))
 
 (defmethod ^:private ->exception-response :default [e]
-  (println e)
-  {:status 500 :body {:message "unknown exception"}})
+  (if (= (:buddy.auth/type (ex-data e)) :buddy.auth/unauthorized)
+    {:status 401 :body {:message "Unauthorized"}}
+    {:status 500 :body {:message "unknown exception"}}))
 
 (defmethod ^:private ->exception-response NOT-FOUND [e] {:status 404 :body (ex-data e)})
 

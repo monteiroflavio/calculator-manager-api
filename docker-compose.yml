@@ -4,13 +4,8 @@ services:
     build: ./
     ports:
       - 8080:8080
-    environment:
-      PORT: 8080
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_ADDRESS: postgres-database
-      INITIAL_CREDIT: 1000
+    env_file:
+      - .env
     depends_on:
       - postgres-database
     links:
@@ -18,10 +13,8 @@ services:
 
   postgres-database:
     image: postgres:15.2-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+    env_file:
+      - .env
     ports:
       - 5432:5432
     volumes: 

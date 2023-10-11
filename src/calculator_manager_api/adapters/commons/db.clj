@@ -1,9 +1,8 @@
 (ns calculator-manager-api.adapters.commons.db
-  (:require [calculator-manager-api.config :refer [config]]
+  (:require [calculator-manager-api.adapters.config :refer [config]]
             [calculator-manager-api.models.common :as models.common]
             [honey.sql :as sql]
-            [next.jdbc :as jdbc]
-            [calculator-manager-api.models.operation :as models.operation]))
+            [next.jdbc :as jdbc]))
 
 (def ^:private db-config
   {:dbtype   "postgresql"
