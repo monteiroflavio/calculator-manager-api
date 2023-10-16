@@ -5,6 +5,10 @@
 
 (s/defschema Real (s/pred real? "Not a real number."))
 
+(defn- positive-real? [x] (> x 0))
+
+(s/defschema PositiveReal (s/pred positive-real? "Not a postive real number."))
+
 (defn- not-zero? [x] (not= x 0))
 
 (s/defschema NotZero (s/pred not-zero? "Not a positive real number."))

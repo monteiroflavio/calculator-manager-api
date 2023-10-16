@@ -29,16 +29,16 @@
   (println e)
   (->exception-response models.response/INTERNAL-SERVER-ERROR "Unknown error"))
 
-(defmethod ^:private ->exception-response-handler :default [e]
-  (if (= (:buddy.auth/type (ex-data e)) :buddy.auth/unauthorized)
-    (->exception-response models.response/UNAUTHORIZED "Unauthorized")
-    (general-exception-response e)))
-
 (defmethod ^:private ->exception-response-handler :schema.core/error [e]
   (->exception-response models.response/BAD-REQUEST (str "Bad request: " (:error (ex-data e)))))
 
 (defmethod ^:private ->exception-response-handler NOT-ENOUGH-CREDIT [e]
   (->exception-response models.response/BAD-REQUEST (:message (ex-data e))))
+
+(defmethod ^:private ->exception-response-handler :default [e]
+  (if (= (:buddy.auth/type (ex-data e)) :buddy.auth/unauthorized)
+    (->exception-response models.response/UNAUTHORIZED "Unauthorized")
+    (general-exception-response e)))
 
 (defmethod ^:private ->exception-response-handler NOT-FOUND [e]
   (->exception-response models.response/NOT-FOUND (:message (ex-data e))))

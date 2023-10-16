@@ -1,15 +1,17 @@
 (ns calculator-manager-api.ports.repositories.record
-  (:require [calculator-manager-api.adapters.commons.db :refer [execute! insert-record-map
-                                                   list-record-map
-                                                   update-record-map]]
-            [calculator-manager-api.mappers.record :refer [dbs->internals]]
-            [calculator-manager-api.models.common :as models.common]))
+  (:require [calculator-manager-api.adapters.commons.db :refer [execute!
+                                                                insert-record-map
+                                                                list-record-map update-record-map]]
+            [calculator-manager-api.mappers.record :refer [db->internals]]
+            [calculator-manager-api.models.common :as models.common]
+            [calculator-manager-api.models.record :refer [Record]]
+            [schema.core :as s]))
 
-(defn list!
+(s/defn list! :- [Record]
   [user-id status q limit offset sorting sorting-field]
   (-> (list-record-map user-id status q limit offset sorting sorting-field)
       execute!
-      dbs->internals))
+      db->internals))
 
 (defn delete!
   [id]

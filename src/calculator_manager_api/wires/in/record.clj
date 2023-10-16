@@ -1,5 +1,5 @@
 (ns calculator-manager-api.wires.in.record 
-  (:require [calculator-manager-api.models.common :refer [NotZero]]
+  (:require [calculator-manager-api.models.common :refer [NotZero PositiveReal]]
             [schema.core :as s]))
 
 (s/defschema ^:private ValidOperationId
@@ -15,9 +15,6 @@
   (-> base-insert-record-skeleton
       (assoc :a s/Num)))
 
-(def ^:private SingleParameterInsertRecord
-  single-parameter-insert-record-skeleton)
-
 (def ^:private DoubleParametersInsertRecord
   (-> single-parameter-insert-record-skeleton
       (assoc :b s/Num)))
@@ -25,6 +22,11 @@
 (def ^:private PositiveDenominatorInsertRecord
   (-> single-parameter-insert-record-skeleton
       (assoc :b NotZero)))
+
+(def ^:private PositiveSingleInsertRecord
+  (-> single-parameter-insert-record-skeleton
+      (dissoc :a)
+      (assoc :a PositiveReal)))
 
 (defn ^:private insert-record? [operation-id schema]
   (= (:operation-id schema) operation-id))
@@ -34,5 +36,5 @@
                            #(insert-record? 3 %) DoubleParametersInsertRecord
                            #(insert-record? 4 %) DoubleParametersInsertRecord
                            #(insert-record? 5 %) PositiveDenominatorInsertRecord
-                           #(insert-record? 6 %) SingleParameterInsertRecord
+                           #(insert-record? 6 %) PositiveSingleInsertRecord
                            #(insert-record? 7 %) BaseInsertRecord))

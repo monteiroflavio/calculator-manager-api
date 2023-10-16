@@ -2,7 +2,7 @@
   (:require [calculator-manager-api.adapters.commons.db :refer [execute!
                                                                 list-operation-map]]
             [calculator-manager-api.mappers.operation :refer [db->internal
-                                                              dbs->internals]]
+                                                              db->internals]]
             [calculator-manager-api.models.operation :refer [Operation]]
             [schema.core :as s]))
 
@@ -10,7 +10,7 @@
   []
   (-> (list-operation-map nil)
       execute! 
-      dbs->internals))
+      db->internals))
 
 (s/defn get! :- Operation
   [id :- s/Int]
