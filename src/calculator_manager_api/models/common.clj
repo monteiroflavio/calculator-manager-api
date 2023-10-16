@@ -1,9 +1,13 @@
 (ns calculator-manager-api.models.common
   (:require [schema.core :as s]))
 
-(defn- positive? [x] (> x 0))
+(defn- real? [x] (>= x 0))
 
-(s/defschema PositiveBigDecimal (s/pred positive? "Not a positive value."))
+(s/defschema Real (s/pred real? "Not a real number."))
+
+(defn- not-zero? [x] (not= x 0))
+
+(s/defschema NotZero (s/pred not-zero? "Not a positive real number."))
 
 (def ^:const ACTIVE "A")
 (def ^:const INACTIVE "I")

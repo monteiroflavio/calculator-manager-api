@@ -1,5 +1,5 @@
 (ns calculator-manager-api.models.operation
-  (:require [calculator-manager-api.models.common :refer [PositiveBigDecimal]]
+  (:require [calculator-manager-api.models.common :refer [Real]]
             [schema.core :as s]))
 
 (def ^:const CREDIT         "credit")
@@ -14,8 +14,8 @@
   (s/enum CREDIT ADDITION SUBTRACTION MULTIPLICATION DIVISION SQUARE-ROOT RANDOM-STRING))
 
 (def operation-skeleton
-  {:id   {:schema Integer}
-   :type {:schema Type}
-   :cost {:schema PositiveBigDecimal}})
+  {:id   s/Int
+   :type Type
+   :cost Real})
 
 (s/defschema Operation operation-skeleton)

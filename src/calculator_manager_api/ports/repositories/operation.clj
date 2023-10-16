@@ -1,13 +1,19 @@
 (ns calculator-manager-api.ports.repositories.operation
-  (:require [calculator-manager-api.adapters.commons.db :refer [execute! list-operation-map]]
-            [calculator-manager-api.mappers.operation :refer [db->internal dbs->internals]]))
+  (:require [calculator-manager-api.adapters.commons.db :refer [execute!
+                                                                list-operation-map]]
+            [calculator-manager-api.mappers.operation :refer [db->internal
+                                                              dbs->internals]]
+            [calculator-manager-api.models.operation :refer [Operation]]
+            [schema.core :as s]))
 
-(defn list! []
+(s/defn list! :- [Operation]
+  []
   (-> (list-operation-map nil)
       execute! 
       dbs->internals))
 
-(defn get! [id]
+(s/defn get! :- Operation
+  [id :- s/Int]
   (-> (list-operation-map id)
       execute!
       (get 0)

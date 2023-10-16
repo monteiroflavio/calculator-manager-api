@@ -2,6 +2,6 @@
   (:require [schema.core :as s]))
 
 (s/defn enough-balance? :- s/Bool
-  [user-balance   :- BigDecimal
-   operation-cost :- BigDecimal]
+  [user-balance   :- s/Num
+   operation-cost :- s/Num]
   (>= user-balance operation-cost))

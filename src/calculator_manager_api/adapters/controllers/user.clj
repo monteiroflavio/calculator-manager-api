@@ -1,12 +1,14 @@
 (ns calculator-manager-api.adapters.controllers.user 
-  (:require [calculator-manager-api.mappers.response :refer [->ok]]
+  (:require [calculator-manager-api.adapters.commons.jwt :refer [jwt-sign]]
+            [calculator-manager-api.mappers.response :refer [->ok]]
             [calculator-manager-api.ports.services.user :as services.user]
-            [calculator-manager-api.adapters.commons.jwt :refer [jwt-sign]]))
+            [calculator-manager-api.wires.in.user :refer [AuthenticateUser]]
+            [schema.core :as s]))
 
-(defn authenticate! [req]
-  (let [query-params (:body req)
-        username     (get query-params "username")
-        password     (get query-params "password")
+(s/defn authenticate!
+  [{:keys [body]}]
+  (let [_ (s/validate AuthenticateUser body)
+        {:keys [username password]} body
         user         (services.user/get! username password)
         token        (jwt-sign (:id user))]
     (->ok {:token token})))

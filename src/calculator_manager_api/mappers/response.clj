@@ -1,22 +1,44 @@
 (ns calculator-manager-api.mappers.response 
-  (:require [calculator-manager-api.models.exception :refer [NOT-ENOUGH-CREDIT NOT-FOUND]]))
+  (:require [calculator-manager-api.models.exception :refer [NOT-ENOUGH-CREDIT NOT-FOUND]]
+            [calculator-manager-api.models.response :as models.response :refer [Response]]
+            [schema.core :as s]))
 
-(defn ->ok [body]
-  {:status 200 :body body})
+(defn ^:private ->response
+  ([status]
+   (->response status nil))
+  ([status body]
+   (-> {:status status}
+       (merge
+        (when (not (nil? body)) {:body body})))))
 
-(defn ->created []
-  {:status 201})
+(defn ^:private ->exception-response [status message]
+  (->response status {:message message}))
 
-(defn ->no-content []
-  {:status 204})
+(s/defn ->ok [body] :- Response
+  {:status models.response/OK :body body})
 
-(defmulti ->exception-response (fn [e] (:type (ex-data e))))
+(s/defn ->created [] :- Response
+  (->response models.response/CREATED))
 
-(defmethod ^:private ->exception-response :default [e]
+(s/defn ->no-content [] :- Response
+  (->response models.response/NO-CONTENT))
+
+(defmulti ->exception-response-handler (fn [e] (:type (ex-data e))))
+
+(defn ^:private general-exception-response [e]
+  (println e)
+  (->exception-response models.response/INTERNAL-SERVER-ERROR "Unknown error"))
+
+(defmethod ^:private ->exception-response-handler :default [e]
   (if (= (:buddy.auth/type (ex-data e)) :buddy.auth/unauthorized)
-    {:status 401 :body {:message "Unauthorized"}}
-    {:status 500 :body {:message "unknown exception"}}))
+    (->exception-response models.response/UNAUTHORIZED "Unauthorized")
+    (general-exception-response e)))
 
-(defmethod ^:private ->exception-response NOT-FOUND [e] {:status 404 :body (ex-data e)})
+(defmethod ^:private ->exception-response-handler :schema.core/error [e]
+  (->exception-response models.response/BAD-REQUEST (str "Bad request: " (:error (ex-data e)))))
 
-(defmethod ^:private ->exception-response NOT-ENOUGH-CREDIT [e] {:status 400 :body (ex-data e)})
+(defmethod ^:private ->exception-response-handler NOT-ENOUGH-CREDIT [e]
+  (->exception-response models.response/BAD-REQUEST (:message (ex-data e))))
+
+(defmethod ^:private ->exception-response-handler NOT-FOUND [e]
+  (->exception-response models.response/NOT-FOUND (:message (ex-data e))))

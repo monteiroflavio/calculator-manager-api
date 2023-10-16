@@ -27,7 +27,7 @@
         update-count (-> (insert-user-map username password) execute! count-adapter)]
     (execute! (insert-operations-map operations))
     (when (> update-count 0)
-      (execute! (insert-record-map 1 1 initial-credit 0M nil models.common/INACTIVE)))))
+      (execute! (insert-record-map 1 1 initial-credit 0.0M nil models.common/INACTIVE)))))
 
 (defn ^:private migrate-users! []
   (execute! create-users-table-map)

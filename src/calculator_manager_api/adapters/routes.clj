@@ -1,8 +1,8 @@
 (ns calculator-manager-api.adapters.routes
-  (:require [calculator-manager-api.adapters.commons.middlewares :refer [authenticated-middleware exception-middleware]]
+  (:require [calculator-manager-api.adapters.commons.middlewares :refer [authenticated-middleware exception-middleware json->edn_middleware]]
             [calculator-manager-api.adapters.controllers.operation :as controllers.operation]
             [calculator-manager-api.adapters.controllers.record :as controllers.record]
-            [calculator-manager-api.adapters.controllers.user :as controllers.user] 
+            [calculator-manager-api.adapters.controllers.user :as controllers.user]
             [compojure.core :refer :all]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]))
 
@@ -25,10 +25,12 @@
   (routes
    (-> #'public-routes
        (wrap-routes exception-middleware)
+       (wrap-routes json->edn_middleware)
        (wrap-routes wrap-json-response)
        (wrap-routes wrap-json-body))
    (-> #'private-routes
        (wrap-routes authenticated-middleware)
        (wrap-routes exception-middleware)
+       (wrap-routes json->edn_middleware)
        (wrap-routes wrap-json-response)
        (wrap-routes wrap-json-body))))

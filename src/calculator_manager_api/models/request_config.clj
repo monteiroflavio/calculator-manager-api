@@ -4,14 +4,12 @@
 (s/defschema Method
   (s/enum :get :post :put :patch :delete))
 
-(s/defschema HandlerParameters [s/Any s/Any s/Any])
-
 (def request-config-skeleton
-  {:url          {:schema s/Str}
-   :method       {:schema Method}
-   :options      {:schema (s/maybe map)}
-   :query-params {:schema map}
-   :on-success   {:schema (s/=> HandlerParameters)}
-   :on-error     {:schema (s/=> HandlerParameters)}})
+  {:url          s/Str
+   :method       Method
+   :options      (s/maybe s/Any)
+   :query-params s/Any
+   :on-success   (s/=> s/Any)
+   :on-error     (s/=> s/Any)})
 
 (s/defschema RequestConfig request-config-skeleton)

@@ -1,10 +1,12 @@
 (ns calculator-manager-api.adapters.controllers.record
   (:require [calculator-manager-api.logics.http-utils :refer [map-qs]]
             [calculator-manager-api.mappers.response :refer [->created
-                                                ->no-content ->ok]]
-            [calculator-manager-api.ports.services.record :as services.record]))
+                                                             ->no-content ->ok]]
+            [calculator-manager-api.wires.in.record :refer [InsertRecord]]
+            [calculator-manager-api.ports.services.record :as services.record]
+            [schema.core :as s]))
 
-(defn list!
+(s/defn list!
   [req]
   (let [user-id       (Integer/parseInt (get (:params req) :user-id))
         query-params  (map-qs (:query-string req))
@@ -17,16 +19,14 @@
     (->ok response)))
 
 (defn insert!
-  [req]
-  (let [user-id (Integer/parseInt (get (:params req) :user-id))
-        body    (:body req)
-        operation-id (get body "operation-id")
-        a (get body "a")
-        b (get body "b")
-        _ (services.record/insert! user-id operation-id a b)]
+  [{:keys [body] :as req}]
+  (let [_ (s/validate InsertRecord body)
+        user-id (Integer/parseInt (-> req :params :user-id))
+        {:keys [operation-id a b]} body]
+    (services.record/insert! user-id operation-id a b)
     (->created)))
 
 (defn delete! [req]
-  (let [id (Integer/parseInt (get (:params req) :id))
-        _ (services.record/delete! id)]
+  (let [id (Integer/parseInt (get (:params req) :id))]
+    (services.record/delete! id)
     (->no-content)))

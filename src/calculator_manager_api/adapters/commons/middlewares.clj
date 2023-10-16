@@ -1,7 +1,7 @@
 (ns calculator-manager-api.adapters.commons.middlewares 
   (:require [buddy.auth :refer [throw-unauthorized]]
             [calculator-manager-api.adapters.commons.jwt :refer [jwt-sign]]
-            [calculator-manager-api.mappers.response :refer [->exception-response]]))
+            [calculator-manager-api.mappers.response :refer [->exception-response-handler]]))
 
 (defn authenticated-middleware [handler]
   (fn [req]
@@ -18,4 +18,11 @@
     (try
       (handler-fn req)
       (catch Exception e
-        (->exception-response e)))))
+        (->exception-response-handler e)))))
+
+(defn json->edn_middleware [handler-fn]
+  (fn [req]
+    (let [body (:body req)
+          body (into {} (map (fn [[k v]] {(keyword k) v}) body))
+          req (assoc req :body body)]
+      (handler-fn req))))
