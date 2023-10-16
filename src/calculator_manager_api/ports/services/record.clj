@@ -47,17 +47,15 @@
    operation-id :- s/Int
    a            :- (s/maybe s/Num)
    b            :- (s/maybe s/Num)]
-  (let [last-record        (-> user-id (repositories.record/list! nil nil nil nil "desc" "date") (get 0))
-        operation          (services.operation/get! operation-id)
-        user-balance       (:amount last-record)
-        operation-cost     (:cost operation)
-        operation-type     (:type operation)
-        enough-balance?    (enough-balance? user-balance operation-cost)
-        amount             (- user-balance operation-cost)
-        operation-response (calculate! operation-type a b)]
+  (let [last-record         (-> user-id (repositories.record/list! nil nil nil nil "desc" "date") (get 0))
+        {:keys [cost type]} (services.operation/get! operation-id)
+        user-balance        (:amount last-record)
+        enough-balance?     (enough-balance? user-balance cost)
+        amount              (- user-balance cost)
+        operation-response  (calculate! type a b)]
     (if enough-balance?
       (repositories.record/insert! operation-id user-id amount user-balance operation-response)
-      (throw (ex-info "" (->not-enough-credit ENTITY user-balance operation-cost))))))
+      (throw (ex-info "" (->not-enough-credit ENTITY user-balance cost))))))
 
 (s/defn delete! :- s/Any
   [id :- s/Int]

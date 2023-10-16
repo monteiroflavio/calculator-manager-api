@@ -8,11 +8,11 @@
 (s/defn db->internal :- models.record/Record
   [db-record :- db.record/Record]
   {:id                 (:records/id db-record)
-   :user               (mappers.user/db->internal db-record)
-   :operation          (mappers.operation/db->internal db-record)
-   :user-balance       (:records/user-balance db-record)
+   :user               (-> db-record mappers.user/db-record->db-user mappers.user/db->internal)
+   :operation          (-> db-record mappers.operation/db-record->db-operation mappers.operation/db->internal)
+   :user-balance       (:records/user_balance db-record)
    :amount             (:records/amount db-record)
-   :operation-response (:records/operation-response db-record)
+   :operation-response (:records/operation_response db-record)
    :date               (str (:records/date db-record))
    :status             (:records/status db-record)})
 

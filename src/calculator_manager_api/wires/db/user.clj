@@ -6,6 +6,7 @@
 (def user-skeleton
   #:users{:id       s/Int
           :username Email
+          :password s/Str
           :status   Status})
 
 (s/defschema User user-skeleton)

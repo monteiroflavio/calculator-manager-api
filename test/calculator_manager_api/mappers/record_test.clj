@@ -10,9 +10,9 @@
                 :operations/type            "credit"
                 :operations/cost            3M
                 :records/id                 1
-                :records/user-balance       10M
+                :records/user_balance       10M
                 :records/amount             10M
-                :records/operation-response "1"
+                :records/operation_response "1"
                 :records/date               "2023-01-01"
                 :records/status             "A"})
 
