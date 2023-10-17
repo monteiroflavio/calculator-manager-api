@@ -1,12 +1,12 @@
 # calculator-manager-api
 
-This project's goal is to provide an REST API to allow calculations features. Each calculation requested by the user has a cost, and will be executed or not based on user's credit. The API is written in Clojure, and it uses a relational DB (PostgreSQL) to store relevant information. Also, it can be run locally with Docker. More information on how to run is provided below.
+This project goal is to provide an REST API to allow calculations. Each calculation requested by the user has a cost, and will be executed or not based on user's credit. The API is written in Clojure, and it uses a relational DB (PostgreSQL) to store relevant information. Also, it can be run locally with Docker. More information on how to run is provided below.
 
 ## Usage
 
 In order to run the application, you neeed to have installed Docker along with Docker Compose. Once you make sure they are installed, run the following commands:
 
-```
+```sh
 git clone git@github.com:monteiroflavio/calculator-manager-api.git
 cd calculator-manager-api
 cp .env.example .env
@@ -69,7 +69,7 @@ This route's goal is to authenticate the user, returning a token which will be u
 
 ### Private routes
 
-All routes below need to have the parameter `Authorization` set on request headers. Its value should be `Bearer <token>`, which is returned by `POST /v1/authenticate` success request. All requests where authorization is not set, will receive the following as response:
+All routes below need to have the parameter `Authorization` set on request headers. Its value should be `Bearer <token>`, where `<token>` is returned by `POST /v1/authenticate` success request. All requests where authorization is not set, will receive the following as response:
 
 - **Status code**: 401
 - **Response body**:
@@ -269,21 +269,22 @@ Within `adapters` folders, all code which depends of some external source is pla
 
 #### `ports`
 
-Inside `ports` folder is all code that is responsible for interfacing internal and external application bondaries. `services` and `repositories` both depends on `adapters` structures, and orchestrates calls to more inner pure functions, such as the ones placed on `logics` or `mappers` folders.
+Inside `ports` folder is all code that is responsible for interfacing internal and external application bondaries. `services` and `repositories` both depend on `adapters` components, and orchestrate calls to more inner pure functions, such as the ones placed on `logics` or `mappers` folders.
 
 ### `logics` and `mappers`
 
-Those are the highest level and more independent pieces of code. They are completely independent of other layers, and are used to build the application knowledge on the `ports` layers. `logics` contains pieces of code that carries some businesss rule or is used to remove complexity from other layers, which also allows reuse as a collateral. `mappers` are responsible for converting data from one layer to another, such as database data to domain data, and so on.
+Those are the highest level and more independent pieces of code. They are completely independent of other layers, and are used to build the application knowledge on the `ports` layers. `logics` contain pieces of code that carry some businesss rule or are used to remove complexity from other layers, also allowing reuse as a collateral. `mappers` are responsible for converting data from one layer to another, such as database data to domain data, and so on.
 
 ### `models` and `wires`
 
-`models` and `wires` reflects the data at different layers. `models` are data from domain layer and `wires` are from more external layers, such as HTTP requests (`wires/in`) or database (`wires/db`).
+`models` and `wires` reflect the data at different layers. `models` are data from domain layer and `wires` are from more external layers, such as HTTP requests (`wires/in`) or database (`wires/db`).
 
 ## Project decisions
 
 Here, some decisions made throughout the development will be described.
 
-- DynamoDB was the first choice for the job. Some libraries (e.g. faraday) were tested, but as they seemed to complex to do simple things, and many abstraction would need to be developed in order to reduce coupling, a relational approach was choose with PostgreSQL's honeysql library.
+- DynamoDB was the first choice for the job. Some libraries (e.g. faraday) were tested, but as they seemed too complex to do simple things, and many abstraction would need to be developed in order to reduce coupling, a relational approach was choose with PostgreSQL's honeysql library.
 - For the sake of simplicity, and since there are only two routes that depends on it, routes that expose data are exposing `models` instead of an output layer data (e.g. `wires/out`).
-- `adapters/commons` are pieces of code that could be extracted to a library, but, as they will not be required to any other project for know, it will be kept there.
+- `adapters/commons` are pieces of code that could be extracted to a library, but, as they will not be required to any other project for now, they will be kept there.
 - Users authentication is done through JWS token, which is not the most safe. It could be replaced for other strategy such as JWT or encrypted JWT in the future.
+- Initial database data is inserted through `migrations.clj`. A better approach to manage migrations is to be decided.
