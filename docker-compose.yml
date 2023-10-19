@@ -10,6 +10,8 @@ services:
       - postgres-database
     links:
       - postgres-database
+    networks:
+      - calculator-manager-network
 
   postgres-database:
     image: postgres:15.2-alpine
@@ -19,6 +21,12 @@ services:
       - 5432:5432
     volumes: 
       - db:/var/lib/postgresql/data
+    networks:
+      - calculator-manager-network
+
+networks:
+  calculator-manager-network:
+    driver: bridge
 
 volumes:
   db:

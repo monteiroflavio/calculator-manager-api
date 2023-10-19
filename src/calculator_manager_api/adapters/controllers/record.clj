@@ -11,8 +11,8 @@
   (let [user-id       (Integer/parseInt (get (:params req) :user-id))
         query-params  (map-qs (:query-string req))
         q             (:q query-params)
-        limit         (:limit query-params)
-        offset        (:offset query-params)
+        limit         (some-> (:limit query-params) Integer/parseInt)
+        offset        (some-> (:offset query-params) Integer/parseInt)
         sorting       (:sorting query-params)
         sorting-field (:sorting-field query-params)
         response (services.record/list! user-id q limit offset sorting sorting-field)]

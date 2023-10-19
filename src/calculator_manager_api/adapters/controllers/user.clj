@@ -9,6 +9,7 @@
   [{:keys [body]}]
   (let [_ (s/validate AuthenticateUser body)
         {:keys [username password]} body
-        user         (services.user/get! username password)
-        token        (jwt-sign (:id user))]
-    (->ok {:token token})))
+        user    (services.user/get! username password)
+        user-id (:id user)
+        token   (jwt-sign user-id)]
+    (->ok {:token token :user {:id user-id}})))

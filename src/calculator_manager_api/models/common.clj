@@ -17,3 +17,8 @@
 (def ^:const INACTIVE "I")
 
 (s/defschema Status (s/enum ACTIVE INACTIVE))
+
+(def ^:const ASCENDING "asc")
+(def ^:const DESCENDING "desc")
+
+(s/defschema Sorting (s/enum ASCENDING DESCENDING))

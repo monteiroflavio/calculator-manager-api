@@ -3,7 +3,7 @@
             [calculator-manager-api.adapters.commons.db :refer [count-adapter]]
             [calculator-manager-api.logics.operation :refer [enough-balance?]]
             [calculator-manager-api.mappers.exception :refer [->not-enough-credit ->not-found]]
-            [calculator-manager-api.models.common :as models.common]
+            [calculator-manager-api.models.common :as models.common :refer [Sorting]]
             [calculator-manager-api.models.operation :refer [ADDITION DIVISION
                                                              MULTIPLICATION
                                                              RANDOM-STRING SQUARE-ROOT SUBTRACTION]]
@@ -32,10 +32,10 @@
 
 (s/defn list! :- [Record]
   [user-id       :- s/Int
-   q             :- (s/maybe clojure.lang.PersistentArrayMap)
+   q             :- (s/maybe s/Str)
    limit         :- (s/maybe s/Int)
    offset        :- (s/maybe s/Int)
-   sorting       :- (s/maybe s/Str)
+   sorting       :- (s/maybe Sorting)
    sorting-field :- (s/maybe s/Str)]
   (let [result (repositories.record/list! user-id models.common/ACTIVE q limit offset sorting sorting-field)] 
     (if (seq result)

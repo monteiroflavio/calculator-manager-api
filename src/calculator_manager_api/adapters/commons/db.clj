@@ -119,8 +119,8 @@
          :where where-list}
         (merge
          (when (not (nil? sorting-field)) {:order-by [[(keyword sorting-field) sorting]]})
-         (when (not (nil? limit))         {:limit (Integer/parseInt limit)})
-         (when (not (nil? offset))        {:offset (Integer/parseInt offset)}))
+         (when (not (nil? limit))         {:limit limit})
+         (when (not (nil? offset))        {:offset offset}))
         sql/format)))
 
 (defn list-operation-map
