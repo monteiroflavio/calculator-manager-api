@@ -1,6 +1,6 @@
 # calculator-manager-api
 
-This project goal is to provide an REST API to allow calculations. Each calculation requested by the user has a cost, and will be executed or not based on user's credit. The API is written in Clojure, and it uses a relational DB (PostgreSQL) to store relevant information. Also, it can be run locally with Docker. More information on how to run is provided below.
+This project goal is to provide a REST API to allow calculations. Each calculation requested by the user has a cost, and will be executed or not based on user's credit. The API is written in Clojure, and it uses a relational DB (PostgreSQL) to store relevant information. Also, it can be run locally with Docker. More information on how to run is provided below.
 
 ## Usage
 
