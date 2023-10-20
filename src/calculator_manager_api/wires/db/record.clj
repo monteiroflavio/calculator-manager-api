@@ -12,6 +12,7 @@
    :operations/id              s/Int
    :operations/type            Type
    :operations/cost            Real
+   :operations/status          Status
    :records/id                 s/Int
    :records/user_id            s/Int
    :records/operation_id       s/Int

@@ -6,26 +6,32 @@
   (s/enum 2 3 4 5 6 7))
 
 (def ^:private base-insert-record-skeleton
-  {:operation-id ValidOperationId})
+  {:operation-id ValidOperationId
+   :a (s/maybe s/Num)
+   :b (s/maybe s/Num)})
 
 (def ^:private BaseInsertRecord
   base-insert-record-skeleton)
 
 (def ^:private single-parameter-insert-record-skeleton
   (-> base-insert-record-skeleton
-      (assoc :a s/Num)))
+      (dissoc :a :b)
+      (assoc :a s/Num
+             :b (s/maybe s/Num))))
 
 (def ^:private DoubleParametersInsertRecord
   (-> single-parameter-insert-record-skeleton
+      (dissoc :b)
       (assoc :b s/Num)))
 
 (def ^:private PositiveDenominatorInsertRecord
   (-> single-parameter-insert-record-skeleton
+      (dissoc :b)
       (assoc :b NotZero)))
 
 (def ^:private PositiveSingleInsertRecord
   (-> single-parameter-insert-record-skeleton
-      (dissoc :a)
+      (dissoc :a :b)
       (assoc :a PositiveReal)))
 
 (defn ^:private insert-record? [operation-id schema]

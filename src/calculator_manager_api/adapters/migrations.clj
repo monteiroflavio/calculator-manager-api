@@ -14,13 +14,13 @@
             [calculator-manager-api.models.common :as models.common]))
 
 (defn ^:private insert-defaults-map! []
-  (let [operations [[models.operation/CREDIT         0]
-                    [models.operation/ADDITION       50]
-                    [models.operation/SUBTRACTION    50]
-                    [models.operation/MULTIPLICATION 250]
-                    [models.operation/DIVISION       250]
-                    [models.operation/SQUARE-ROOT    800]
-                    [models.operation/RANDOM-STRING  500]]
+  (let [operations [[models.operation/CREDIT         0 "I"]
+                    [models.operation/ADDITION       50 "A"]
+                    [models.operation/SUBTRACTION    50 "A"]
+                    [models.operation/MULTIPLICATION 250 "A"]
+                    [models.operation/DIVISION       250 "A"]
+                    [models.operation/SQUARE-ROOT    800 "A"]
+                    [models.operation/RANDOM-STRING  500 "A"]]
         username "foo@bar.com"
         password "AYag$vzzM/zXtSBs=$mI+9+Q3/yjkzvxEb2u1X9Sc3LNM="
         initial-credit (Float/parseFloat (:initial-credit config))

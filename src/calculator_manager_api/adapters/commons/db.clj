@@ -47,6 +47,7 @@
        [[:id :serial [:not nil]]
         [:type :text [:not nil]]
         [:cost :float [:not nil]]
+        [:status [:varchar 1] [:not nil] [:default models.common/ACTIVE]]
         [[:primary-key :id]]]}
       sql/format))
 
@@ -65,7 +66,7 @@
       sql/format))
 
 (defn insert-operations-map [operations]
-  (-> {:insert-into [:operations [:type :cost]]
+  (-> {:insert-into [:operations [:type :cost :status]]
        :values operations
        :on-conflict :type
        :do-nothing true}
@@ -125,7 +126,7 @@
 
 (defn list-operation-map
   [id]
-  (let [where-list (if (not (nil? id)) {:where [:= :o.id id]} {})]
+  (let [where-list (if (not (nil? id)) {:where [:= :o.id id]} {:where [:= :status "A"]})]
     (-> {:select [:*]
          :from [[:operations :o]]}
         (merge where-list)

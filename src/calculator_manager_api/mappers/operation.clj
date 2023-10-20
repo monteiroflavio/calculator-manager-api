@@ -17,4 +17,4 @@
 
 (s/defn db-record->db-operation :- db.operation/Operation
   [db-record :- Record]
-  (-> db-record (select-keys [:operations/id :operations/type :operations/cost])))
+  (-> db-record (select-keys [:operations/id :operations/type :operations/cost :operations/status])))
