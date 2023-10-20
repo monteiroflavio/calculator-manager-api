@@ -13,5 +13,6 @@
                  [com.github.seancorfield/next.jdbc "1.3.834"]
                  [org.postgresql/postgresql         "42.2.10"] 
                  [prismatic/schema                  "1.4.1"]
-                 [ring/ring-json                    "0.5.1"]]
+                 [ring/ring-json                    "0.5.1"]
+                 [ring-cors                         "0.1.13"]]
   :repl-options {:init-ns clojure-sandbox.core})
