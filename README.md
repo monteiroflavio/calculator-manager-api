@@ -247,10 +247,6 @@ Below, it is presented a tree view of relevant files and folders of the project.
 
 Those files are responsible for allowing this project to be ran agnostic to platform and/or development tools installed. Also, they allow a simpler deployment in efemeral machines, such as ECS from AWS.
 
-### `resources`
-
-This is where all external resources should be placed. Here, deployment files relevant to cloud platform such AWS will take place.
-
 ### `src/calculator_manager_api`
 
 All the source code needed to execute the application lies within this folder. This is the default files separation in several languages.
